@@ -28,93 +28,112 @@ To do this,
 
 To load a text file as spatial layer in QGIS, we select “Layer” -> “Add Layer” -> “Add Delimited Text Layer...” from the main menu in QGIS as shown in Figure 1. This will open a new dialogue as shown in Figure 2.
 
-![Figure 1: Loading a csv file.](Fig1_Tut9.png)
-**Figure 1: Loading a csv file.**
+![Figure 2: Loading a csv file.](Fig1_Tut9.png)
+
+**Figure 2: Loading a csv file.**
 
 We now first select the “data_interpolation.csv” as input file in the field marked with “1”. Next we choose the file format "CSV" in the area marked with "2". This will tell QGIS how the individual columns in the csv-file are separated. Afterwards we set the Geometry Definition. The csv file contains point coordinates and we hence select the corresponding option (marked with "3"). To tell QGIS where the points are located, we have to define a x-field containing the x-coordinates (Longitude) and the y-field containing the y-coordinates (Latitude). Finally we set the coordinate reference system to EPSG:4326 - WGS 84 (see area marked with "5") and click Add. We select the EPSG:4326 system since the points in the csv file are stored as geographic coordinates.
 
-![Figure 2: Adding a delimited Text.](Fig2_Tut9.png)
-**Figure 2: Adding a delimited Text.**
+![Figure 3: Adding a delimited Text.](Fig2_Tut9.png)
 
-This should lead to a situation as depicted in Figure 3.
+**Figure 3: Adding a delimited Text.**
 
-![Figure 3: After loading the two datasets.](Fig3_Tut9.png)
-**Figure 3: After loading the two datasets.**
+This should lead to a situation as depicted in Figure 4.
+
+![Figure 4: After loading the two datasets.](Fig3_Tut9.png)
+
+**Figure 4: After loading the two datasets.**
 
 We now have two datasets with different projections which we need to change in the next step to prepare the data for interpolation.
 
-**To reproject the point data stored in the geographic coordinate system, we select “Vector” -> “Data Management Tools” -> “Reproject Layer...” from the main menu in QGIS as shown in Figure 4. This will open a new dialogue as shown in Figure 5.**
+**To reproject the point data stored in the geographic coordinate system, we select “Vector” -> “Data Management Tools” -> “Reproject Layer...” from the main menu in QGIS as shown in Figure 5. This will open a new dialogue as shown in Figure 5.**
 
-![Figure 4: Reprojecting a vector layer.](Fig4_Tut9.png)
-**Figure 4: Reprojecting a vector layer.**
+![Figure 5: Reprojecting a vector layer.](Fig4_Tut9.png)
+
+**Figure 5: Reprojecting a vector layer.**
 
 Here we can reproject the precipitation data by
 
-**first selecting the “data_interpolation” layer as input file in the field marked with “1”. After selecting the layer,  we set an output file in the field marked with “3” and we need to specify a target CRS in the field marked “2”. In this case, we will select the CRS with the EPSG code 32633 which is the same CRS as currently defined for the satellite image. After defining the correct Target CRS we press “OK” and QGIS will re-project the point-vector layer and add it as a new layer. If you now check the CRS of the new layer by performing a right–click, selecting “Properties” and the “General” tab, you will see that the CRS is now also set to 32633.**
+**first selecting the “data_interpolation” layer as input file in the field marked with “1”. After selecting the layer,  we set an output file in the field marked with “3” in Figure 6 and we need to specify a target CRS in the field marked “2”. In this case, we will select the CRS with the EPSG code 32633 which is the same CRS as currently defined for the satellite image. After defining the correct Target CRS we press “OK” and QGIS will re-project the point-vector layer and add it as a new layer. If you now check the CRS of the new layer by performing a right–click, selecting “Properties” and the “General” tab, you will see that the CRS is now also set to 32633.**
 
-![Figure 5: Reproject layer.](Fig5_Tut9.png)
-**Figure 5: Reproject layer.**
+![Figure 6: Reproject layer.](Fig5_Tut9.png)
+
+**Figure 6: Reproject layer.**
 
 
 
 ## 2 IDW Interpolation
-Wer are now ready to interpolate the precipitation values provided in the csv-file. We will use the extent of the satellite image as area for the interpolation.
 
-Interpolation results can vary significantly based on the method and parameters you choose. QGIS in its standard installation provides two interpolation methods: Triangulated Irregular Network (TIN) and Inverse Distance Weighting (IDW). For the first part of the tutorial we are using the IDW method.
+Wer are now ready to interpolate the precipitation values provided in the csv-file. We will use the extent of the satellite image as area for the interpolation. Interpolation results can vary significantly based on the method and parameters you choose. QGIS in its standard installation provides two interpolation methods: Triangulated Irregular Network (TIN) and Inverse Distance Weighting (IDW). For the first part of the tutorial we are using the IDW method.
 
-First from the Processing Toolbox search and locate the "Interpolation" -> "IDW interpolation" tool as shown in Figure 6. (Remember in the main menu click "Processing" -> "Toolbox" in case the toolbox is now shown). Double-click to launch it. 
+First from the Processing Toolbox search and locate the "Interpolation" -> "IDW interpolation" tool as shown in Figure 7. (Remember in the main menu click "Processing" -> "Toolbox" in case the toolbox is now shown). Double-click to launch it. 
 
-![Figure 6: Processing Toolbox.](Fig6_Tut9.png)
-**Figure 6: Processing Toolbox.**
+![Figure 7: Processing Toolbox.](Fig6_Tut9.png)
+
+**Figure 7: Processing Toolbox.**
 
 In the new dialogue window we
 
-**first select the “data_interpolation_reproject” layer as input file in the field marked with “1” in Figure 7. After selecting the interpolation layer,  we select the interpolation attribute "Precipitat" marked with "2" and click on the plus symbol to add it to the attribute window below. Next we set the "Distance coefficent P" marked with "3".** 
+**first select the “data_interpolation_reproject” layer as input file in the field marked with “1” in Figure 8. After selecting the interpolation layer,  we select the interpolation attribute "Precipitat" marked with "2" and click on the plus symbol to add it to the attribute window below. Next we set the "Distance coefficent P" marked with "3".** 
 
 P is a important coefficcent in this method, because weights are proportional to the inverse of the distance (between the data point and the prediction location) raised to the power value P. So as mentioned above the result is dependent on this parameter.  As a result, as the distance increases, the weights decrease rapidly. The rate at which the weights decrease is dependent on the value of P. If P = 0, there is no decrease with distance, and because each weight is the same, the prediction will be the mean of all the data values in the search neighborhood. As P increases, the weights for distant points decrease rapidly. If the P value is very high, only the immediate surrounding points will influence the prediction.
-**After setting P (you may try some different values for that) we set the extent marked with "4". For this we calculate the extent from our satellite image. Next you can set the Pixel size marked with "5". Note that the pixel size will affect the calculation time. Before you run the algorithm you can name an output file in the field marked with "6".**
 
-![Figure 7: IDW Interpolation dialogue.](Fig7_Tut9.png)
-**Figure 7: IDW Interpolation dialogue.**
+**After setting P (you may try some different values for that) we set the extent (marked with "4" in Figure 8). For this we calculate the extent from our satellite image. Next you can set the Pixel size marked with "5". Note that the pixel size will affect the calculation time. Before you run the algorithm you can name an output file in the field marked with "6".**
 
-The IDW interpolation tool will then output a black and white interpolated raster surface onto the map area as shown in Figure 8. Based on your P value and your pixel size it may look different.
+![Figure 8: IDW Interpolation dialogue.](Fig7_Tut9.png)
 
-![Figure 8: IDW interpolation result.](Fig8_Tut9.png)
-**Figure 8: IDW interpolation result.**
+**Figure 8: IDW Interpolation dialogue.**
 
-The next step is to clip the land mass. For that 
-**we are loading the "Campania_boundaries.shp" located in the “Datasets/Tutorial_interpolation” folder.** This should lead to a situation as depicted in Figure 9.
+The IDW interpolation tool will then output a black and white interpolated raster surface onto the map area as shown in Figure 9. Based on your P value and your pixel size it may look different.
 
-![Figure 9: After loading the campania boundaries.](Fig9_Tut9.png)
-**Figure 9: After loading the campania boundaries.**
+![Figure 9: IDW interpolation result.](Fig8_Tut9.png)
+
+**Figure 9: IDW interpolation result.**
+
+The next step is to clip the interpolation result to the land mass since we did not have any precipitation observation for the sea and we could assume that precipitation patterns differ over the sea. 
+
+To clip the interpolation layer 
+
+**we load the "Campania_boundaries.shp" as learned in earlier tutorials.** 
+
+This should lead to a situation as depicted in Figure 10.
+
+![Figure 10: After loading the campania boundaries.](Fig9_Tut9.png)
+
+**Figure 10: After loading the campania boundaries.**
 
 Next
-**we select “Raster” -> “Extraction” -> “Clip Raster by Mask Layer...” from the main menu in QGIS as shown in Figure 10.**
+**we select “Raster” -> “Extraction” -> “Clip Raster by Mask Layer...” from the main menu in QGIS as shown in Figure 11.**
 
-![Figure 10: Opening the clipping tool.](Fig10_Tut9.png)
-**Figure 10: Opening the clipping tool.**
+![Figure 11: Opening the clipping tool.](Fig10_Tut9.png)
+**Figure 11: Opening the clipping tool.**
 
 In the new dialogue window we
 
-**first select the “precipitation_idw_p5” layer as input file in the field marked with “1” in Figure 11. After selecting the input layer,  we select the Mask layer "Campania_boundaries" marked with "2". As you can see in Figure 11 we are lucky that both layer have the same CRS, else we would have to reproject the layers before. Next we save the file in the field marked with "3" as a geoTIFF file.  Now click "Run"**
+**first select the “precipitation_idw_p5” layer as input file in the field marked with “1” in Figure 11. After selecting the input layer,  we select the Mask layer "Campania_boundaries" marked with "2" in Figure 12. As you can see in Figure 12 we are lucky that both layer have the same CRS, else we would have to reproject the layers before. Next we save the file in the field marked with "3" as a geoTIFF file.  Now click "Run"**
 
-![Figure 11: Clip Raster by Mask Layer.](Fig11_Tut9.png)
-**Figure 11: Clip Raster by Mask Layer.**
+![Figure 12: Clip Raster by Mask Layer.](Fig11_Tut9.png)
 
-The new clipped layer will be added to the canvas and only shows the land mass as depicted in Figure 12.
+**Figure 12: Clip Raster by Mask Layer.**
 
-![Figure 12: Clipped Raster.](Fig11_Tut9.png)
-**Figure 12: Clipped Raster.**
+The new clipped layer will be added to the canvas and only shows the land mass as depicted in Figure 13.
 
-**To make it more beautiful customize the symbology. To do it, right click the clipped raster result and select Properties (Or simply you can double click the layer name). The Layer Properties window will appear as shown in Figure 13. Select the Symbology tab marked with "1". In the Band Rendering option change the Render type to Singleband pseudocolor. (marked with "2") Then you can set your color ramp marked with "3". The color should fit to the object which is shown in a map. To classify you can set a classification mode (marked with"4") and the number of classes (marked with "5"), just explore if you want.**
+![Figure 13: Clipped Raster.](Fig11_Tut9.png)
+
+**Figure 13: Clipped Raster.**
+
+**To make the visual appearance more pleasing, we can customize the symbology. To do it, right click the clipped raster result and select Properties (Or simply you can double click the layer name). The Layer Properties window will appear as shown in Figure 14. Select the Symbology tab marked with "1". In the Band Rendering option change the Render type to Singleband pseudocolor. (marked with "2") Then you can set your color ramp marked with "3". The color should fit to the object which is shown in a map. To classify you can set a classification mode (marked with"4") and the number of classes (marked with "5"), just explore if you want.**
 
 After modifying the colour ramp values to reflect the range of values in a suitable way click ‘apply’ and ‘ok’ and you will now have coloured map of the IDW interpolation surface for precipitation in mm/year as shown in Figure 14.
 
-![Figure 13: Symbology.](Fig13_Tut9.png)
-**Figure 13: Symbology.**
+![Figure 14: Symbology.](Fig13_Tut9.png)
 
-![Figure 14: Result of the IDW interpolation.](Fig14_Tut9.png)
-**Figure 14: Result of the IDW interpolation.**
+**Figure 14: Symbology.**
+
+![Figure 15: Result of the IDW interpolation.](Fig14_Tut9.png)
+
+**Figure 15: Result of the IDW interpolation.**
+
 ## 3 TIN Interpolation
 Next, we will interpolate the elevation point data by using the Triangulated Irregular Network (TIN) method, which is mainly used for elevation.
 
