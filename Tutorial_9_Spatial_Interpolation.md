@@ -4,19 +4,23 @@
 
 **Abstract**
 
-After completing this tutorial you will know how to to create a continuous surface from discrete points. This process is called interpolation. 
+After completing this tutorial you will know how to to derive a continuous surface of estimates from discrete points with measured values. This process is called interpolation. 
+
 ## 1 Loading Datasets and Reprojecting 
-In this tutorial we will learn how to interpolate precipitation measurements und elevation. We will make use of a precipitation dataset provided by Centro Funzionale Multirischi della Protezione Civile Regione Campania. This dataset contains the annual precipitation from the year 2021 in mm/year. We will also use global elevation data provided by United States Geological Survey (USGS) and a dataset representing the NUTS (Nomenclature of territorial units for statistics) and Statistical regions provided by Eurostat.
+In this tutorial we will learn how to interpolate punctual precipitation and elevation measurements. We will make use of a precipitation dataset provided by the "Centro Funzionale Multirischi della Protezione Civile Regione Campania§. This dataset contains measurements of annual precipitation from the year 2021 in mm/year. We will also use global elevation data provided by United States Geological Survey (USGS) and a dataset representing the NUTS (Nomenclature of territorial units for statistics) and Statistical regions provided by Eurostat.
+
 As a first step
 
-**we again first load the raster dataset “S2_Neapel_sm2.tif” located in the “Datasets/S2” folder and adapt the visualization settings to have a balanced view of all classes by using the channels R=3, G=2, B=1 and loading new max / min values using the “Style”- tab in the properties window. Then we additionally load the “data_interpolation” csv located in the “Datasets/Tutorial_interpolation” folder.**
+**we again first load the raster dataset “S2_Neapel_sm2.tif” and adapt the visualization settings to have a balanced view of all classes by using the channels R=3, G=2, B=1 and loading new max / min values using the “Symbology”- tab in the properties window. Then we additionally load the points stored in the file “data_interpolation.csv" which you can access here: **
 
-To load a text file, we select “Layer” -> “Add Layer” -> “Add Delimited Text Layer...” from the main menu in QGIS as shown in Figure 1. This will open a new dialogue as shown in Figure 2.
+
+
+To load a text file as spatial layer in QGIS, we select “Layer” -> “Add Layer” -> “Add Delimited Text Layer...” from the main menu in QGIS as shown in Figure 1. This will open a new dialogue as shown in Figure 2.
 
 ![Figure 1: Loading a csv file.](Fig1_Tut9.png)
 **Figure 1: Loading a csv file.**
 
-First selecting the “data_interpolation” layer as input file in the field marked with “1”. Next choose the file format "CSV" marked with "2" to get numbers in integer format. Afterwards set the Geometry Definition. We are using point coordinates (marked with "3"). Select for the x field the x and for the y field the y values. Finally set the geometry crs to EPSG:4326 - WGS 84 (marked with "5") and click Add.
+We now first select the “data_interpolation.csv” as input file in the field marked with “1”. Next we choose the file format "CSV" in the area marked with "2". This will tell QGIS how the individual columns in the csv-file are separated. Afterwards we set the Geometry Definition. The csv file contains point coordinates and we hence select the corresponding option (marked with "3"). To tell QGIS where the points are located, we have to define a x-field containing the x-coordinates (Longitude) and the y-field containing the y-coordinates (Latitude). Finally we set the coordinate reference system to EPSG:4326 - WGS 84 (see area marked with "5") and click Add. We select the EPSG:4326 system since the points in the csv file are stored as geographic coordinates.
 
 ![Figure 2: Adding a delimited Text.](Fig2_Tut9.png)
 **Figure 2: Adding a delimited Text.**
