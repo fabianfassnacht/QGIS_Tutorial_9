@@ -135,39 +135,41 @@ After modifying the colour ramp values to reflect the range of values in a suita
 **Figure 15: Result of the IDW interpolation.**
 
 ## 3 TIN Interpolation
-Next, we will interpolate the elevation point data by using the Triangulated Irregular Network (TIN) method, which is mainly used for elevation.
+Next, we will also try the second interpolation method which is available in the base-installation of QGIS, that is the Triangulated Irregular Network (TIN) method. This time we will not interpolate the precipitation data but the elevation point data which is also stored in the csv-file.
 
-First from the Processing Toolbox search and locate the "Interpolation" -> "TIN interpolation" tool as shown in Figure 15.
+First from the Processing Toolbox search and locate the "Interpolation" -> "TIN interpolation" tool as shown in Figure 16.
 
-![Figure 15: Processing Toolbox.](Fig15_Tut9.png)
-**Figure 15: Processing Toolbox.**
+![Figure 16: Processing Toolbox.](Fig15_Tut9.png)
+
+**Figure 16: Processing Toolbox.**
 
 In the new dialogue window we
 
-**first select the “data_interpolation_reproject” layer as input file in the field marked with “1” in Figure 16. After selecting the interpolation layer,  we select the interpolation attribute "Elevation" marked with "2" and click on the plus symbol to add it to the attribute window below. As a interpolation method we keep "linear". We set the extent marked with "3". For this we calculate the extent from our satellite image. Next you can set the Pixel size marked with "4". Last we save the output as a .tif file marked with "5" and run the algorithm.**
+**first select the “data_interpolation_reproject” layer as input file in the field marked with “1” in Figure 17. After selecting the interpolation layer,  we select the interpolation attribute "Elevation" (area marked with "2" in Figure 16) and click on the plus symbol to add it to the attribute window below. As a interpolation method we keep "linear". We set the extent by clicking the button marked with "3" to the extent from our satellite image. Next you can set the Pixel size marked with "4". Last we save the output as a .tif file by defining the filename in the field marked with "5" and run the algorithm.**
 
-![Figure 16: TIN Interpolation dialogue.](Fig16_Tut9.png)
-**Figure 16: TIN Interpolation dialogue.**
+![Figure 17: TIN Interpolation dialogue.](Fig16_Tut9.png)
 
-The TIN interpolation tool will then output a black and white interpolated raster surface onto the map area as shown in Figure 17.
+**Figure 17: TIN Interpolation dialogue.**
 
-![Figure 17: TIN interpolation result.](Fig17_Tut9.png)
-**Figure 17: TIN interpolation result.**
+The TIN interpolation tool will then output a black and white interpolated raster surface onto the map area as shown in Figure 18.
 
-In the next step we clip the land mass like we did before with the IDW interpolation.
+![Figure 18: TIN interpolation result.](Fig17_Tut9.png)
 
-So again,
-**we select “Raster” -> “Extraction” -> “Clip Raster by Mask Layer...” from the main menu in QGIS. In the new dialogue window we first select the “elevation_tin” layer as input file. After selecting the input layer,  we select the Mask layer "Campania_boundaries". Next we save the file as a geoTIFF file.  Now click "Run"**
+**Figure 18: TIN interpolation result.**
 
-The new clipped layer will be added to the map area and only shows the land mass and the interpolated triangles as depicted in Figure 18.
+In the next step we clip the land mass like we did before with the IDW interpolation. You should already know how to accomplish this by now. The new clipped layer will be added to the map area and only shows the land mass and the interpolated triangles as depicted in Figure 19.
 
-![Figure 18: Clipped Raster.](Fig18_Tut9.png)
-**Figure 18: Clipped Raster.**
+![Figure 19: Clipped Raster.](Fig18_Tut9.png)
 
-Now we customize the symbology like we did with the IDW interpolation. Feel free to modify the symbology as you like.
+**Figure 19: Clipped Raster.**
 
-![Figure 19: Result of the TIN interpolation.](Fig19_Tut9.png)
-**Figure 19: Result of the TIN interpolation.**
+Now we can customize the symbology as we did for the output layer of the IDW interpolation. Feel free to modify the symbology as you like. One option is shown in Figure 20.
+
+![Figure 20: Result of the TIN interpolation.](Fig19_Tut9.png)
+
+**Figure 20: Result of the TIN interpolation.**
 
 ## 4 Exercise Tutorial 9
-Explain the mechanism of both interpolation methods. What are the Strengths and weaknesses?
+Run each interpolation method for the input layers for which you did not yet run it and play around a bit more with the settings. Have a look at the outputs and discuss which method with which settings you believe provides "most realistic looking" results. Prepare a simple map (using the skills you acquired in the last tutorial) containing the view of what you would consider best interpolation result you obtained during your trial runs.
+
+If you want to compare your results to a more sophisticated climate interpolation dataset, you can search for the so called "WorldClim" dataset and download the corresponding file for "annual precipitation", load it to QGIS and compare it with your own result.
