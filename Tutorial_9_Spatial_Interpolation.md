@@ -9,10 +9,21 @@ After completing this tutorial you will know how to to derive a continuous surfa
 ## 1 Loading Datasets and Reprojecting 
 In this tutorial we will learn how to interpolate punctual precipitation and elevation measurements. We will make use of a precipitation dataset provided by the "Centro Funzionale Multirischi della Protezione Civile Regione Campania§. This dataset contains measurements of annual precipitation from the year 2021 in mm/year. We will also use global elevation data provided by United States Geological Survey (USGS) and a dataset representing the NUTS (Nomenclature of territorial units for statistics) and Statistical regions provided by Eurostat.
 
-As a first step
+You can access the precipitation dataset here:
 
-**we again first load the raster dataset “S2_Neapel_sm2.tif” and adapt the visualization settings to have a balanced view of all classes by using the channels R=3, G=2, B=1 and loading new max / min values using the “Symbology”- tab in the properties window. Then we additionally load the points stored in the file “data_interpolation.csv" which you can access here: **
+If we load the dataset in a common text-editor, the file should look as shown in Figure 1:
 
+![Figure 1: The precipitation csv file.](Fig0_Tut9.png)
+
+**Figure 1: The precipitation csv file.**
+
+We can see that the file contains 6 columns including the X and Y coordinates of the measurement stations, an ID, the annual precipitation value recorded at this station, the name of the station and it elevation.
+
+We will now load this data into QGIS, along with the Sentinel-2 satellite image.
+
+To do this,
+
+**we again first load the raster dataset “S2_Neapel_sm2.tif” and adapt the visualization settings to have a balanced view of all classes by using the channels R=3, G=2, B=1 and loading new max / min values using the “Symbology”- tab in the properties window. Then we additionally load the points stored in the file “data_interpolation.csv"**
 
 
 To load a text file as spatial layer in QGIS, we select “Layer” -> “Add Layer” -> “Add Delimited Text Layer...” from the main menu in QGIS as shown in Figure 1. This will open a new dialogue as shown in Figure 2.
@@ -31,24 +42,27 @@ This should lead to a situation as depicted in Figure 3.
 **Figure 3: After loading the two datasets.**
 
 We now have two datasets with different projections which we need to change in the next step to prepare the data for interpolation.
-**To reproject the point data, we select “Vector” -> “Data Management Tools” -> “Reproject Layer...” from the main menu in QGIS as shown in Figure 4. This will open a new dialogue as shown in Figure 5.**
+
+**To reproject the point data stored in the geographic coordinate system, we select “Vector” -> “Data Management Tools” -> “Reproject Layer...” from the main menu in QGIS as shown in Figure 4. This will open a new dialogue as shown in Figure 5.**
 
 ![Figure 4: Reprojecting a vector layer.](Fig4_Tut9.png)
 **Figure 4: Reprojecting a vector layer.**
 
 Here we can reproject the precipitation data by
 
-**first selecting the “data_interpolation” layer as input file in the field marked with “1”. After selecting the precipitation layer,  we set an output file in the field marked with “3” and we need to specify a target CRS in the field marked “2”. In this case, we will select the CRS with the EPSG code 32633 which is the same CRS as currently defined for the satellite image. After defining the correct Target CRS we press “OK” and QGIS will re-project the raster and add it as a new layer. If you now check the CRS of the new layer by performing a right–click, selecting “Properties” and the “General” tab, you will see that the CRS is now also set to 32633.**
+**first selecting the “data_interpolation” layer as input file in the field marked with “1”. After selecting the layer,  we set an output file in the field marked with “3” and we need to specify a target CRS in the field marked “2”. In this case, we will select the CRS with the EPSG code 32633 which is the same CRS as currently defined for the satellite image. After defining the correct Target CRS we press “OK” and QGIS will re-project the point-vector layer and add it as a new layer. If you now check the CRS of the new layer by performing a right–click, selecting “Properties” and the “General” tab, you will see that the CRS is now also set to 32633.**
 
 ![Figure 5: Reproject layer.](Fig5_Tut9.png)
 **Figure 5: Reproject layer.**
 
+
+
 ## 2 IDW Interpolation
-We have just successfully prepared our interpolation dataset. Next, we will interpolate the point data for precipitation and use our satellite image as a extent for that.
+Wer are now ready to interpolate the precipitation values provided in the csv-file. We will use the extent of the satellite image as area for the interpolation.
 
-**Interpolation results can vary significantly based on the method and parameters you choose. QGIS interpolation supports Triangulated Irregular Network (TIN) and Inverse Distance Weighting (IDW) methods for interpolation. Now we are using the IDW method.**
+Interpolation results can vary significantly based on the method and parameters you choose. QGIS in its standard installation provides two interpolation methods: Triangulated Irregular Network (TIN) and Inverse Distance Weighting (IDW). For the first part of the tutorial we are using the IDW method.
 
-First from the Processing Toolbox search and locate the "Interpolation" -> "IDW interpolation" tool as shown in Figure 6. (Remember in the main menu click "Processing" -> "Toolbox".) Double-click to launch it. 
+First from the Processing Toolbox search and locate the "Interpolation" -> "IDW interpolation" tool as shown in Figure 6. (Remember in the main menu click "Processing" -> "Toolbox" in case the toolbox is now shown). Double-click to launch it. 
 
 ![Figure 6: Processing Toolbox.](Fig6_Tut9.png)
 **Figure 6: Processing Toolbox.**
@@ -56,6 +70,7 @@ First from the Processing Toolbox search and locate the "Interpolation" -> "IDW 
 In the new dialogue window we
 
 **first select the “data_interpolation_reproject” layer as input file in the field marked with “1” in Figure 7. After selecting the interpolation layer,  we select the interpolation attribute "Precipitat" marked with "2" and click on the plus symbol to add it to the attribute window below. Next we set the "Distance coefficent P" marked with "3".** 
+
 P is a important coefficcent in this method, because weights are proportional to the inverse of the distance (between the data point and the prediction location) raised to the power value P. So as mentioned above the result is dependent on this parameter.  As a result, as the distance increases, the weights decrease rapidly. The rate at which the weights decrease is dependent on the value of P. If P = 0, there is no decrease with distance, and because each weight is the same, the prediction will be the mean of all the data values in the search neighborhood. As P increases, the weights for distant points decrease rapidly. If the P value is very high, only the immediate surrounding points will influence the prediction.
 **After setting P (you may try some different values for that) we set the extent marked with "4". For this we calculate the extent from our satellite image. Next you can set the Pixel size marked with "5". Note that the pixel size will affect the calculation time. Before you run the algorithm you can name an output file in the field marked with "6".**
 
