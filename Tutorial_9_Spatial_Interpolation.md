@@ -9,7 +9,9 @@ After completing this tutorial you will know how to to derive a continuous surfa
 ## 1 Loading Datasets and Reprojecting 
 In this tutorial we will learn how to interpolate punctual precipitation and elevation measurements. We will make use of a precipitation dataset provided by the "Centro Funzionale Multirischi della Protezione Civile Regione Campania§. This dataset contains measurements of annual precipitation from the year 2021 in mm/year. We will also use global elevation data provided by United States Geological Survey (USGS) and a dataset representing the NUTS (Nomenclature of territorial units for statistics) and Statistical regions provided by Eurostat.
 
-You can access the precipitation dataset here:
+You can access the precipitation dataset and a shapefile of the outline of the land-masses of the study area here:
+
+https://drive.google.com/file/d/1xEZ7rflbptivMOpsOzOYHFQcQ4sePr_P/view?usp=share_link
 
 If we load the dataset in a common text-editor, the file should look as shown in Figure 1:
 
