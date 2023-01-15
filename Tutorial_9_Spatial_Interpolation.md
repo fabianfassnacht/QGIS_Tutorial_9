@@ -96,7 +96,7 @@ The next step is to clip the interpolation result to the land mass since we did 
 
 To clip the interpolation layer 
 
-**we load the "Campania_boundaries.shp" as learned in earlier tutorials.** 
+**we load the "Campania_boundaries.shp" (included in the dataset at the beginning of the tutorial) as learned in earlier tutorials.** 
 
 This should lead to a situation as depicted in Figure 10.
 
